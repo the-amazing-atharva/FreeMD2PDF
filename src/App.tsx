@@ -38,26 +38,37 @@ export default function App() {
   // Mobile tabs (Editor / Preview)
   const [tabValue, setTabValue] = useState<"editor" | "preview">("editor");
 
-  // >>> NEW: Margin controls state
-  const [margins, setMargins] = useState<Margins>({
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
+  // >>> NEW: Margin controls raw string state
+  const [rawMargins, setRawMargins] = useState({
+    top: "0",
+    right: "0",
+    bottom: "0",
+    left: "0",
   });
+
+  // Convert raw string margins to numbers for actual use
+  const margins: Margins = {
+    top: Number(rawMargins.top) || 0,
+    right: Number(rawMargins.right) || 0,
+    bottom: Number(rawMargins.bottom) || 0,
+    left: Number(rawMargins.left) || 0,
+  };
+
   const [unit, setUnit] = useState<MarginUnit>("mm");
 
-  // Helper to change one side
-  const updateMargin =
-    (side: keyof Margins) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      const raw = Number(e.target.value);
-      const safe = Number.isFinite(raw) ? Math.max(0, raw) : 0;
-      setMargins((m) => ({ ...m, [side]: safe }));
+  // Handle input changes allowing only digits or empty string
+  const handleMarginChange =
+    (side: keyof typeof rawMargins) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
+      if (/^\d*$/.test(val)) {
+        setRawMargins((m) => ({ ...m, [side]: val }));
+      }
     };
 
-  // Reset to defaults
+  // Reset margins to default "0"
   const resetMargins = () =>
-    setMargins({ top: 0, right: 0, bottom: 0, left: 0 });
+    setRawMargins({ top: "0", right: "0", bottom: "0", left: "0" });
 
   const handleDownload = () => {
     setLoading(true);
@@ -141,41 +152,45 @@ export default function App() {
             <label className="flex flex-col gap-1">
               <span className="text-sm">Top</span>
               <input
-                type="number"
-                min={0}
-                value={margins.top}
-                onChange={updateMargin("top")}
+                type="text"
+                inputMode="numeric"
+                value={rawMargins.top}
+                onChange={handleMarginChange("top")}
                 className="border rounded-md px-2 py-1"
+                placeholder="0"
               />
             </label>
             <label className="flex flex-col gap-1">
               <span className="text-sm">Right</span>
               <input
-                type="number"
-                min={0}
-                value={margins.right}
-                onChange={updateMargin("right")}
+                type="text"
+                inputMode="numeric"
+                value={rawMargins.right}
+                onChange={handleMarginChange("right")}
                 className="border rounded-md px-2 py-1"
+                placeholder="0"
               />
             </label>
             <label className="flex flex-col gap-1">
               <span className="text-sm">Bottom</span>
               <input
-                type="number"
-                min={0}
-                value={margins.bottom}
-                onChange={updateMargin("bottom")}
+                type="text"
+                inputMode="numeric"
+                value={rawMargins.bottom}
+                onChange={handleMarginChange("bottom")}
                 className="border rounded-md px-2 py-1"
+                placeholder="0"
               />
             </label>
             <label className="flex flex-col gap-1">
               <span className="text-sm">Left</span>
               <input
-                type="number"
-                min={0}
-                value={margins.left}
-                onChange={updateMargin("left")}
+                type="text"
+                inputMode="numeric"
+                value={rawMargins.left}
+                onChange={handleMarginChange("left")}
                 className="border rounded-md px-2 py-1"
+                placeholder="0"
               />
             </label>
           </div>
