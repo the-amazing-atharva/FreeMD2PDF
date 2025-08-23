@@ -40,10 +40,10 @@ export default function App() {
 
   // >>> NEW: Margin controls state
   const [margins, setMargins] = useState<Margins>({
-    top: 15,
-    right: 15,
-    bottom: 15,
-    left: 15,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
   });
   const [unit, setUnit] = useState<MarginUnit>("mm");
 
@@ -57,7 +57,7 @@ export default function App() {
 
   // Reset to defaults
   const resetMargins = () =>
-    setMargins({ top: 15, right: 15, bottom: 15, left: 15 });
+    setMargins({ top: 0, right: 0, bottom: 0, left: 0 });
 
   const handleDownload = () => {
     setLoading(true);
@@ -112,7 +112,7 @@ export default function App() {
             {/* Preview */}
             <TabsContent value="preview" className="mt-1 space-y-4">
               <div className="grid">
-                <Preview markdown={markdown} />
+                <Preview markdown={markdown} margins={margins} unit={unit} />
               </div>
             </TabsContent>
           </Tabs>
@@ -130,7 +130,7 @@ export default function App() {
 
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
             <Editor value={markdown} setMarkdown={setMarkdown} />
-            <Preview markdown={markdown} />
+            <Preview markdown={markdown} margins={margins} unit={unit} />
           </div>
         </div>
 
@@ -274,7 +274,12 @@ export default function App() {
       {/* Hidden overlay we snapshot for the PDF (unchanged) */}
       <div className="target-overlay">
         <div className="flex items-center justify-center">
-          <Preview markdown={markdown} isTarget={true} />
+          <Preview
+            markdown={markdown}
+            isTarget={true}
+            margins={margins}
+            unit={unit}
+          />
         </div>
       </div>
 
