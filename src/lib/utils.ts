@@ -40,6 +40,18 @@ function toMm(value: number, unit: MarginUnit): number {
 }
 
 /**
+ * Convert mm / px / pt into CSS pixels for on-screen preview
+ */
+export function toPx(value: number, unit: MarginUnit): number {
+  if (unit === "px") return value;
+  if (unit === "mm") {
+    return (value * 96) / 25.4; // 96 px per inch, 25.4 mm per inch
+  }
+  // unit === "pt"
+  return (value * 96) / 72; // 72 pt per inch
+}
+
+/**
  * Generate the PDF from the hidden #target element, honoring custom margins.
  * - margins: values in the chosen unit (mm/px/pt)
  * - unit   : which unit margins are written in

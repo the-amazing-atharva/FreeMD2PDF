@@ -5,18 +5,7 @@ import remarkGfm from "remark-gfm";
 import "highlight.js/styles/atom-one-dark.css";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils.ts";
-import { type Margins, type MarginUnit } from "@/lib/utils.ts";
-
-// Helper: convert user unit to pixels (for on-screen preview only)
-function toPx(value: number, unit: MarginUnit): number {
-  if (unit === "px") return value;
-  if (unit === "mm") {
-    // 96 CSS px = 25.4 mm
-    return (value * 96) / 25.4;
-  }
-  // unit === "pt"
-  return (value * 96) / 72;
-}
+import { type Margins, type MarginUnit, toPx } from "@/lib/utils.ts";
 
 const Preview = ({
   markdown,
